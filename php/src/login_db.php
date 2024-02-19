@@ -6,9 +6,11 @@
     if(isset($_POST['login'])){
         $user_name = $_POST['user_name'];
         $pass = $_POST['pass'];
+        // hash password
+        $hash_pwd = md5($pass);
         $db->table = "users";
         $db->field = "user_name, user_passowrd,is_pri";
-        $db->condition = "WHERE user_name='{$user_name}' AND user_passowrd='{$pass}'";
+        $db->condition = "WHERE user_name='{$user_name}' AND user_passowrd='{$hash_pwd}'";
         $q = $db->select();
         $i=mysqli_fetch_assoc($q);
         if(!empty($i)){

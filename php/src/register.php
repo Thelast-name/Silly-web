@@ -1,12 +1,11 @@
 <?php
     include "layout/header.php";
-    include "layout/navbar.php";
 ?>
 <body>
     <div class="container">
-        <h3 class="text-center">Register for Free</h3>
+        <h3 class="text-center mt-5">Register for Free</h3>
         <div class="w-50 m-auto">
-            <form action="register_db.php" method="post" class="text-center">
+            <form action="register_db.php" method="post" class="text-center mt-4">
                 <div class="mb-3 row">
                     <label for="" class="col-sm-3 col-form-label">user name</label>
                     <div class="col-sm-8">

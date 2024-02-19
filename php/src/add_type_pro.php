@@ -19,8 +19,10 @@
                     <?php if(!empty($_SESSION['error'])) { ?>
                         <div class="p-1 mb-2 bg-danger text-white">
                             <p class="text-center">
-                                <?php 
-                                    echo $_SESSION['error'];
+                                <?php
+                                    foreach ($_SESSION['error'] as $x) { 
+                                        echo $x;
+                                    }
                                     unset($_SESSION['error']);
                                 ?>
                             </p>

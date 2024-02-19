@@ -4,6 +4,7 @@
     $db_check = new Database();
     $db = new Database();
 
+    // เพิ่มข้อมูล product
     if(isset($_POST['add_product'])){
         $arr_err = array();
         $pro_name = $_POST['product_name'];
@@ -14,6 +15,7 @@
         $type_product = $_POST['type_product'];
         $check_empty =array($pro_name, $pro_detail, $pro_price, $pro_unit,  $type_product);
 
+        // เช็คค่าว่าง
         $arrlength=count($check_empty);
         for($x=0;$x<$arrlength;$x++)
         {
@@ -32,9 +34,11 @@
         if(!is_null($r)){
             array_push($arr_err, "ชื่อนี้มีแล้วเอาชื่ออื่น!!");
         }
+        // เช็คจำนวน error
         if(count($arr_err) == 0) {
+            // upload image
              if($fileupload <> ''){
-                $path = "uploads/" . date("Y-m-d") . "_{$type_product}_" . ".jpg";
+                $path = "uploads/" . uniqid() . "_{$type_product}_" . ".jpg";
                 move_uploaded_file($_FILES['img']['tmp_name'], $path);
              }
             $db->table = "product";
@@ -52,8 +56,9 @@
         
     }
 
-    
+    // แก้ไขข้อมูล product
     if(isset($_POST['edit_product'])){
+        $arr_err = array();
         $id = $_POST['id'];
         $pro_name = $_POST['product_name'];
         $pro_detail = $_POST['product_detail'];
@@ -62,23 +67,48 @@
         $fileupload = $_FILES['img'];
         $type_product = $_POST['type_product'];
 
-        if($fileupload <> ''){
-            $path = "uploads/" . $pro_name . ".jpg";
-            move_uploaded_file($_FILES['img']['tmp_name'], $path);
-         }
-
-        $db->table = "product";
-        $db->val = "pro_name='{$pro_name}',pro_detail='{$pro_detail}',pro_price='{$pro_price}', pro_unit='{$pro_unit}', pro_img='{$path}', type_id='{$type_product}'";
-        $db->condition = "WHERE pro_id={$id}";
-        $query = $db->update();
-
-        if($query) {
-            header("location: manage_product.php");
+        $check_empty =array($pro_name, $pro_detail, $pro_price, $pro_unit,  $type_product);
+        // เช็คค่าว่าง
+        $arrlength=count($check_empty);
+        for($x=0;$x<$arrlength;$x++)
+        {
+            if(empty($check_empty[$x])){
+                array_push($arr_err, "กรุณากรอกให้ครบทุกช่องด้วย!!");
+            }
         }
+        if($_FILES['img']['size'] == 0){
+            // เช็คจำนวน error
+            if(count($arr_err) == 0) {
+                $db->table = "product";
+                $db->val = "pro_name='{$pro_name}',pro_detail='{$pro_detail}',pro_price='{$pro_price}', pro_unit='{$pro_unit}', type_id='{$type_product}'";
+                $db->condition = "WHERE pro_id={$id}";
+                $query = $db->update();
 
-        
+                if($query) {
+                    header("location: manage_product.php");
+                }
+            }else {
+                $_SESSION['error'] = array_unique($arr_err);
+                header("location: edit_product.php?id=$id");
+            }
+        }else{
+            // upload image
+            if($fileupload <> ''){
+                $path = "uploads/" . uniqid() . "_{$type_product}_" . ".jpg";
+                move_uploaded_file($_FILES['img']['tmp_name'], $path);
+             }
+             $db->table = "product";
+             $db->val = "pro_name='{$pro_name}',pro_detail='{$pro_detail}',pro_price='{$pro_price}', pro_unit='{$pro_unit}', pro_img='{$path}' , type_id='{$type_product}'";
+             $db->condition = "WHERE pro_id={$id}";
+             $query = $db->update();
+
+             if($query) {
+                 header("location: manage_product.php");
+             }
+        }        
     }
 
+    // ลบข้อมูล product
     if(isset($_GET['id'])){
         $id = $_GET['id'];
         $db->table = "product";

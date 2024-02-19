@@ -8,9 +8,11 @@
         $pass = $_POST['pass'];
         $is_pri = $_POST['is_pri'];
 
+        // hash password
+        $hash_pwd = md5($pass);
         $db->table = "users";
         $db->field = "user_name, user_email, user_passowrd, is_pri";
-        $db->val = "'{$user_name}','{$email}', '{$pass}', '{$is_pri}'";
+        $db->val = "'{$user_name}','{$email}', '{$hash_pwd}', '{$is_pri}'";
         $query = $db->insert();
 
         if($query) {
