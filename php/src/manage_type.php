@@ -46,6 +46,7 @@
                     if(isset($_GET['search'])){
                         $search = $_GET['search'];
                         $db->condition = "WHERE type_name LIKE '%{$search}%'";
+                        $db_1->condition = "WHERE type_name LIKE '%{$search}%'";
                     }
                     $n = 0;
 

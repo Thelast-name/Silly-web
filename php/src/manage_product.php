@@ -49,6 +49,7 @@
                         $v = $vali->validate_string($search);
                         if($v != false){
                             $db->condition = "WHERE pro_name LIKE '%{$v}%'";
+                            $db_1->condition = "WHERE pro_name LIKE '%{$v}%'";
                         }
                     }
                     $n = 0;
@@ -60,7 +61,7 @@
                     $r = mysqli_fetch_assoc($q);
                     $total = $r['pro_id'];
                     $page = ceil($total / $limit);
-
+                    
                     while($i=mysqli_fetch_assoc($query)){ 
                     $n += 1;
                 ?>

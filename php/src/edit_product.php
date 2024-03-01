@@ -19,7 +19,7 @@
         <?php 
             $id = $_GET['id'];
             $db->table = "product";
-            $db->condition = "WHERE pro_id=" . $id;
+            $db->condition = "INNER JOIN product_type ON product.type_id = product_type.type_id WHERE pro_id=" . $id;
             $query = $db->select();
             $i=mysqli_fetch_assoc($query)
                 
@@ -59,6 +59,7 @@
                 <div class="col-sm-10">
 
                     <select name="type_product" id="" class="form-select">
+                        <option value="<?php echo $i['type_id']; ?>"><?php echo $i['type_name']; ?></option>
                         <?php
                             $db_2->table = "product_type";
                             $q = $db_2->select();
