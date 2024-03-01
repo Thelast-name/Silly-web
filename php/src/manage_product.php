@@ -7,10 +7,12 @@
         header("Location: login.php ");
     }
     include "data.php";
+    include "validate.php";
     include "layout/header.php";
     include "layout/navbar.php";
     $db_1 = new Database();
     $db = new Database();
+    $vali = new Validate();
 ?>
 <body>
     <div class="container">
@@ -36,16 +38,18 @@
             </thead>
             <tbody>
                 <?php
-                    $limit = 10;
+                    $limit = 10; //แสดง 10 แถว
                     $cur_page = isset($_GET['page']) ? $_GET['page'] : 1;
                     $start = ($cur_page - 1) * $limit;
 
-                    $search = "";
                     $db->table = "product";
                     $db->condition = " LIMIT {$start}, {$limit}";
                     if(isset($_GET['search'])){
                         $search = $_GET['search'];
-                        $db->condition = "WHERE pro_name LIKE '%{$search}%'";
+                        $v = $vali->validate_string($search);
+                        if($v != false){
+                            $db->condition = "WHERE pro_name LIKE '%{$v}%'";
+                        }
                     }
                     $n = 0;
                     $query = $db->select();

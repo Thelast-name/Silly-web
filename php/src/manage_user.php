@@ -7,17 +7,34 @@
         header("Location: login.php ");
     }
     include "data.php";
+    include "validate.php";
     include "layout/header.php";
     include "layout/navbar.php";
     $db = new Database();
+    $db_1 = new Database();
+    $vali = new Validate();
+
+    $limit = 10;
+    $cur_page = isset($_GET['page']) ? $_GET['page'] : 1;
+    $start = ($cur_page - 1) * $limit;
 
     $db->table = "users";
     $db->field = "user_name";
+    $db->condition = " LIMIT {$start}, {$limit}";
     if(isset($_POST['search'])){
         $search = $_POST['search'];
-        $db->condition = "WHERE user_name LIKE '%{$search}%'";
+        $v = $vali->validate_string($search);
+        if($v != false){
+            $db->condition = "WHERE user_name LIKE '%{$search}%'";
+        }
     }
     $query = $db->select();
+    $db_1->field = "count(user_id) AS user_id";
+    $db_1->table = "users";
+    $q = $db_1->select();
+    $r = mysqli_fetch_assoc($q);
+    $total = $r['user_id'];
+    $page = ceil($total / $limit);
 
 ?>
 <body>
@@ -48,5 +65,22 @@
                 <?php } ?>
             </tbody>
         </table>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-end">
+                <?php if($cur_page > 1) { ?>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=<?php echo $cur_page-1;?>">Previous</a>
+                    </li>
+                <?php } ?>
+                <?php for($i=1; $i<= $page; $i++){ ?>
+                <li class="page-item"><a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                <?php } ?>
+                <?php if($page != $cur_page){ ?>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=<?php echo $cur_page+1; ?>">Next</a>
+                    </li>
+                <?php } ?>
+            </ul>
+        </nav>
     </div>
 </body>

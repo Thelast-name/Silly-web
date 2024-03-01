@@ -1,10 +1,25 @@
 <?php
+    session_start();
     include "layout/header.php";
 ?>
 <body>
     <div class="container">
         <h3 class="text-center mt-5">Register for Free</h3>
         <div class="w-50 m-auto">
+        <?php if(!empty($_SESSION['error'])) { ?>
+            <div class="w-25 m-auto">
+                <div class="p-1 mb-2 bg-danger text-white">
+                    <?php
+                        foreach ($_SESSION['error'] as $x) { 
+                    ?>
+                            <p class="text-center"><?php echo $x; ?></p>
+                            <?php 
+                                }
+                                unset($_SESSION['error']);
+                            ?> 
+                </div>
+            </div>
+        <?php } ?>
             <form action="register_db.php" method="post" class="text-center mt-4">
                 <div class="mb-3 row">
                     <label for="" class="col-sm-3 col-form-label">user name</label>

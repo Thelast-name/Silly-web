@@ -7,10 +7,12 @@
         header("Location: login.php ");
     }
     include "data.php";
+    include "validate.php";
     include "layout/header.php";
     include "layout/navbar.php";
     $db_1 = new Database();
     $db = new Database();
+    $vali = new Validate();
 ?>
 <body>
     <div class="container">
@@ -39,7 +41,6 @@
                     $cur_page = isset($_GET['page']) ? $_GET['page'] : 1;
                     $start = ($cur_page - 1) * $limit;
                     
-                    $search = "";
                     $db->table = "product_type";
                     $db->condition = " LIMIT {$start}, {$limit}";
                     if(isset($_GET['search'])){

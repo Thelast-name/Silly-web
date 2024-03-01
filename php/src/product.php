@@ -48,10 +48,12 @@
 
             if($query) {
                 header("location: manage_product.php");
+                exit();
             }
         }else {
             $_SESSION['error'] = array_unique($arr_err);
             header("location:add_product.php");
+            exit();
         }
         
     }
@@ -90,6 +92,7 @@
             }else {
                 $_SESSION['error'] = array_unique($arr_err);
                 header("location: edit_product.php?id=$id");
+                exit();
             }
         }else{
             // upload image
@@ -104,6 +107,7 @@
 
              if($query) {
                  header("location: manage_product.php");
+                 exit();
              }
         }        
     }
@@ -117,5 +121,6 @@
         
         if($query){
             header('location: manage_product.php');
+            exit();
         }
     }
